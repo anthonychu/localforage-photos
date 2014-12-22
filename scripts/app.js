@@ -11,13 +11,14 @@
 
         vm.newPhoto = {};
         vm.savedPhotos = [];
-        vm.driver = localforage.driver();
         vm.savePhoto = savePhoto;
+        vm.getCurrentStorageMode = getCurrentStorageMode;
 
         displayImages();
 
         function savePhoto() {
             var reader = new FileReader();
+            var caption = vm.newPhoto.caption;
             var file = vm.newPhoto.files[0];
 
             reader.onload = function (readerEvt) {
@@ -28,15 +29,16 @@
                     id: key,
                     photo: base64Photo,
                     name: file.name,
-                    type: file.type
+                    type: file.type,
+                    caption: caption
                 };
 
                 $q.when(localforage.setItem(key, photo)).then(function () {
                     alert('saved');
                     vm.newPhoto = {};
-                    displayImages();
+                    vm.savedPhotos.push(photo);
                 }).catch(function (err) {
-                    console.log(err);
+                    alert(err);
                 })
             };
 
@@ -52,7 +54,17 @@
                     });
                 });
             });
-            
+        }
+
+        function getCurrentStorageMode() {
+            switch (localforage.driver()) {
+                case localforage.INDEXEDDB:
+                    return "IndexedDb";
+                case localforage.WEBSQL:
+                    return "WebSQL";
+                default:
+                    return "LocalStorage";
+            }
         }
     }
 

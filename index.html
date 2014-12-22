@@ -1,29 +1,28 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>Test saving photos in LocalForage</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.7/angular.js"></script>
 </head>
-<body ng-app="localforage.photos" ng-controller="PhotosController as vm">
+<body ng-app="localforage.photos" ng-controller="PhotosController as vm" ng-cloak>
 
     <input type="text" ng-model="vm.newPhoto.caption" placeholder="Caption" />
     <input type="file" ng-file-select ng-model="vm.newPhoto.files" ng-multiple="false" accept="image/*" />
-    <button ng-click="vm.savePhoto()" ng-disabled="!vm.newPhoto.files || !vm.newPhoto.files.length">Save</button>
-
-    <div>
-        Mode: {{ vm.driver }}
-    </div>
+    <button ng-click="vm.savePhoto()" ng-disabled="!vm.newPhoto.files || !vm.newPhoto.files.length">Save to {{ vm.getCurrentStorageMode() }}</button>
     
 
-    <div ng-repeat="photo in vm.savedPhotos track by photo.id">
+    <div>
         <hr />
-        <div>
-            <img ng-src="{{ 'data:' + photo.type + ';base64,' + photo.photo }}" style="width: 200px;" />
+        <div ng-repeat="photo in vm.savedPhotos | orderBy: 'id' track by photo.id" style="width: 300px; margin:12px; display: inline-block; overflow: hidden; vertical-align: top">
+            <div>
+                <img ng-src="{{ 'data:' + photo.type + ';base64,' + photo.photo }}" style="max-width: 300px; max-height: 300px;" />
+            </div>
+            <div>{{ photo.caption }}</div>
+            <div style="color: gray;">{{ photo.name }}</div>
         </div>
-        {{ photo.name }}
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/localforage/1.2.0/localforage.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.js"></script>
     <script src="scripts/angular-file-upload.js"></script>
     <script src="scripts/app.js"></script>
 </body>
