@@ -13,12 +13,12 @@
 
     <div>
         <hr />
-        <div ng-repeat="photo in vm.savedPhotos | orderBy: 'id' track by photo.id" style="width: 300px; margin:12px; display: inline-block; overflow: hidden; vertical-align: top">
+        <div ng-repeat="photo in vm.savedPhotos | orderBy: 'id' track by photo.id" style="max-width: 300px; margin: 12px; display: inline-block; overflow: hidden; vertical-align: top;">
             <div>
                 <img ng-src="{{ 'data:' + photo.type + ';base64,' + photo.photo }}" style="max-width: 300px; max-height: 300px;" />
             </div>
             <div>{{ photo.caption }}</div>
-            <div style="color: gray;">{{ photo.name }}</div>
+            <div style="color: lightgray;">{{ photo.name }}</div>
         </div>
     </div>
 
