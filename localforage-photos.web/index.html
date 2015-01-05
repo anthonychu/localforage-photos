@@ -9,7 +9,7 @@
     <input type="text" ng-model="vm.newPhoto.caption" placeholder="Caption" />
     <input type="file" ng-file-select ng-model="vm.newPhoto.files" ng-multiple="false" accept="image/*" />
     <button ng-click="vm.savePhoto()" ng-disabled="!vm.newPhoto.files || !vm.newPhoto.files.length">Save to {{ vm.getCurrentStorageMode() }}</button>
-    
+
 
     <div>
         <hr />
@@ -18,7 +18,10 @@
                 <img ng-src="{{ 'data:' + photo.type + ';base64,' + photo.photo }}" style="max-width: 300px; max-height: 300px;" />
             </div>
             <div>{{ photo.caption }}</div>
-            <div style="color: lightgray;">{{ photo.name }}</div>
+            <div>
+                <button ng-click="vm.deletePhoto(photo)">x</button>
+                <div style="color: lightgray; display: inline;">{{ photo.name }}</div>
+            </div>
         </div>
     </div>
 

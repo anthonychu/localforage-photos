@@ -12,6 +12,7 @@
         vm.newPhoto = {};
         vm.savedPhotos = [];
         vm.savePhoto = savePhoto;
+        vm.deletePhoto = deletePhoto;
         vm.getCurrentStorageMode = getCurrentStorageMode;
 
         displayImages();
@@ -43,6 +44,20 @@
             };
 
             reader.readAsBinaryString(file);
+        }
+
+        function deletePhoto(photo) {
+            $q.when(localforage.removeItem(photo.id)).then(function () {
+                var foundIdx = -1;
+                angular.forEach(vm.savedPhotos, function (value, idx) {
+                    foundIdx = idx;
+                });
+                if (foundIdx >= 0) {
+                    vm.savedPhotos.splice(foundIdx, 1);
+                }
+            }, function (err) {
+                alert(err);
+            });
         }
 
         function displayImages() {
