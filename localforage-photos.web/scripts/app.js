@@ -4,15 +4,16 @@
     angular.module('localforage.photos', ['angularFileUpload'])
         .controller('PhotosController', PhotosController);
 
-    PhotosController.$inject = ['$q'];
+    PhotosController.$inject = ['$q', '$http'];
 
-    function PhotosController($q) {
+    function PhotosController($q, $http) {
         var vm = this;
 
         vm.newPhoto = {};
         vm.savedPhotos = [];
         vm.savePhoto = savePhoto;
         vm.deletePhoto = deletePhoto;
+        vm.uploadPhotos = uploadPhotos;
         vm.getCurrentStorageMode = getCurrentStorageMode;
 
         displayImages();
@@ -49,8 +50,10 @@
         function deletePhoto(photo) {
             $q.when(localforage.removeItem(photo.id)).then(function () {
                 var foundIdx = -1;
-                angular.forEach(vm.savedPhotos, function (value, idx) {
-                    foundIdx = idx;
+                angular.forEach(vm.savedPhotos, function (item, idx) {
+                    if (item.id == photo.id) {
+                        foundIdx = idx;
+                    }
                 });
                 if (foundIdx >= 0) {
                     vm.savedPhotos.splice(foundIdx, 1);
@@ -58,6 +61,10 @@
             }, function (err) {
                 alert(err);
             });
+        }
+
+        function uploadPhotos() {
+            $http.post("/api/photos", vm.savedPhotos);
         }
 
         function displayImages() {
